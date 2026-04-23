@@ -1,0 +1,603 @@
+{
+  "start_node": "prologue",
+  "scenes": {
+    "prologue": {
+      "speaker": "Рассказчик",
+      "text": "🌊 Эртэ урда сагта нэгэ үбгэн хүгшэн хоёр далайн эрье дээрэ ажаһуудаг байгаа.\n\n(Давным-давно жили-были старик со старухой у самого синего моря.)\n\nГотовы ли вы войти в бурятскую сказку «Алтан загаһан» и выучить язык?",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/prologue-buryat.mp3",
+      "dictionary": [
+        {"word": "Эртэ урда сагта", "translation": "Давным-давно"},
+        {"word": "үбгэн", "translation": "старик"},
+        {"word": "хүгшэн", "translation": "старуха"},
+        {"word": "далай", "translation": "море"},
+        {"word": "эрье", "translation": "берег"},
+        {"word": "ажаһуудаг", "translation": "жили-были"}
+      ],
+      "options": [
+        {
+          "text": "🌅 Эхилээд! (Начать сказку)",
+          "next": "fishing_1",
+          "comment": "✓ Отлично! +10 XP"
+        },
+        {
+          "text": "📖 Сначала посмотреть словарь",
+          "next": "practice_prologue",
+          "comment": "📚 Хороший подход к обучению"
+        }
+      ]
+    },
+
+    "practice_prologue": {
+      "speaker": "Система обучения",
+      "text": "📝 Практика: Сопоставьте бурятские слова с их переводом.\n\nВыберите правильный вариант:",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/practice.mp3",
+      "dictionary": [
+        {"word": "далай", "translation": "море"},
+        {"word": "үбгэн", "translation": "старик"},
+        {"word": "хүгшэн", "translation": "старуха"}
+      ],
+      "options": [
+        {
+          "text": "далай → море ✓",
+          "next": "prologue",
+          "comment": "✓ Правильно! +15 XP"
+        },
+        {
+          "text": "далай → старик ✗",
+          "next": "practice_prologue",
+          "comment": "✗ Неверно, попробуй ещё раз"
+        },
+        {
+          "text": "Вернуться к сказке",
+          "next": "prologue",
+          "comment": "⏰ Продолжим позже"
+        }
+      ]
+    },
+
+    "fishing_1": {
+      "speaker": "🎣 Рассказчик",
+      "text": "Үбгэн далай руу загаһа барихаар гараба.\n(Старик пошёл к морю рыбу ловить.)\n\nТүрүүшынхиеэ торхоёо хаяхадань — гансал замаг гараба.\n(В первый раз закинул невод — пришла одна тина.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fishing1.mp3",
+      "dictionary": [
+        {"word": "загаһа бариха", "translation": "ловить рыбу"},
+        {"word": "торхо", "translation": "невод"},
+        {"word": "замаг", "translation": "тина"},
+        {"word": "хаяха", "translation": "закинуть"}
+      ],
+      "options": [
+        {
+          "text": "🔄 Дахин хаяха (Закинуть снова)",
+          "next": "fishing_2",
+          "comment": "✓ Верный выбор! Не сдавайся"
+        },
+        {
+          "text": "🏠 Хариха (Вернуться домой)",
+          "next": "fail_lazy",
+          "comment": "⚠️ Не торопись сдаваться"
+        }
+      ]
+    },
+
+    "fishing_2": {
+      "speaker": "🎣 Рассказчик",
+      "text": "Гурбадахи удаадаа торхоёо татахадань — соониинь гансахэн алтан загаһан байба!\n(В третий раз вытянул невод — а там золотая рыбка!)\n\nОна просит отпустить её человеческим голосом.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fishing2.mp3",
+      "dictionary": [
+        {"word": "алтан загаһан", "translation": "золотая рыбка"},
+        {"word": "гансахэн", "translation": "единственная"},
+        {"word": "гурбадахи", "translation": "третий"},
+        {"word": "татаха", "translation": "тянуть"}
+      ],
+      "options": [
+        {
+          "text": "🐠 Далайдаа амар мэндэ яба даа (Отпустить)",
+          "next": "trough_request",
+          "comment": "🌟 Мудрое решение! +30 XP"
+        },
+        {
+          "text": "🔱 Забрать себе",
+          "next": "fail_greed",
+          "comment": "💔 Жадность лишает чуда"
+        }
+      ]
+    },
+
+    "trough_request": {
+      "speaker": "🐠 Алтан загаһан",
+      "text": "Юу хүсэнэш, үбгэн баабай?\n(Что ты желаешь, старик?)\n\nЯ исполню твоё желание за свободу.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fish-voice.mp3",
+      "dictionary": [
+        {"word": "юу", "translation": "что"},
+        {"word": "хүсэнэш", "translation": "желаешь"},
+        {"word": "баабай", "translation": "дедушка (уважит.)"}
+      ],
+      "options": [
+        {
+          "text": "🏺 Тэбшэ гуйха (Попросить корыто)",
+          "next": "sea_trough",
+          "comment": "🏺 Старуха будет рада"
+        }
+      ]
+    },
+
+    "sea_trough": {
+      "speaker": "🐠 Алтан загаһан",
+      "text": "Буса даа, байха. Тэбшэ байха.\n(Ступай себе, будет. Будет вам корыто.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/trough.mp3",
+      "dictionary": [
+        {"word": "буса", "translation": "возвращайся"},
+        {"word": "байха", "translation": "будет/имеется"},
+        {"word": "тэбшэ", "translation": "корыто"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Хариха (Вернуться домой)",
+          "next": "house_result",
+          "comment": "✨ Посмотрим, что получилось"
+        }
+      ]
+    },
+
+    "house_result": {
+      "speaker": "Рассказчик",
+      "text": "Үбгэн хариба. Харахадань — хуушан тэбшэ байхагүй, шэнэ тэбшэ байба.\n(Вернулся старик. Глядит — старого корыта нет, новое стоит.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/house.mp3",
+      "dictionary": [
+        {"word": "хараха", "translation": "смотреть"},
+        {"word": "хуушан", "translation": "старый"},
+        {"word": "шэнэ", "translation": "новый"}
+      ],
+      "options": [
+        {
+          "text": "🚪 Орохо (Войти в дом)",
+          "next": "house_request",
+          "comment": "🏠 Покажем старухе"
+        }
+      ]
+    },
+
+    "house_request": {
+      "speaker": "👵 Хүгшэн",
+      "text": "Тэбшэ юун бэ? Шэнэ гэр гуй!\n(Корыто — что это? Проси новый дом!)\n\nСтаруха недовольна, хочет большего.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/wife-angry.mp3",
+      "dictionary": [
+        {"word": "гэр", "translation": "дом"},
+        {"word": "шэнэ", "translation": "новый"},
+        {"word": "юун бэ", "translation": "что это"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Гуйха (Просить дом)",
+          "next": "sea_house",
+          "comment": "🏠 Идём дальше по сюжету"
+        },
+        {
+          "text": "🙅 Арсаха (Отказаться)",
+          "next": "fail_wife_anger",
+          "comment": "😠 Старуха разозлится"
+        }
+      ]
+    },
+
+    "sea_house": {
+      "speaker": "🌊 Рассказчик",
+      "text": "Далай долгилно.\n(Море взволновалось.)\n\nРыбка выслушала просьбу о новом доме.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/house.mp3",
+      "dictionary": [
+        {"word": "долгилно", "translation": "волнуется"},
+        {"word": "далай", "translation": "море"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Ждать ответа",
+          "next": "house_result_2",
+          "comment": "🌊 Море неспокойно..."
+        }
+      ]
+    },
+
+    "house_result_2": {
+      "speaker": "Рассказчик",
+      "text": "Вместо землянки теперь высокий терем.\nҮбгэн хариба — шэнэ баян гэр байба.\n(Старик вернулся — новый богатый дом стоит.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/house.mp3",
+      "dictionary": [
+        {"word": "баян", "translation": "богатый"}
+      ],
+      "options": [
+        {
+          "text": "🚪 Орохо (Войти)",
+          "next": "noble_request",
+          "comment": "🏰 Красивый терем!"
+        }
+      ]
+    },
+
+    "noble_request": {
+      "speaker": "👑 Хүгшэн",
+      "text": "Хара хизааргүй хүгшэн байхаа болихоб, баян ноён болохоб!\n(Не хочу быть простой крестьянкой, хочу быть богатой дворянкой!)\n\nСтаруха в дорогой шубе требует большего.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/noble.mp3",
+      "dictionary": [
+        {"word": "баян", "translation": "богатый"},
+        {"word": "ноён", "translation": "дворянин"},
+        {"word": "хизааргүй", "translation": "простой"}
+      ],
+      "options": [
+        {
+          "text": "🌊 Далай руу ябаха (Идти к морю)",
+          "next": "sea_noble",
+          "comment": "💭 Жадность растёт..."
+        }
+      ]
+    },
+
+    "sea_noble": {
+      "speaker": "🌊 Рассказчик",
+      "text": "Далай хара болобо.\n(Море почернело.)\n\nРыбка молча выслушала просьбу о дворянстве.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/noble-fish.mp3",
+      "dictionary": [
+        {"word": "хара", "translation": "черный"},
+        {"word": "болобо", "translation": "стало"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Хариха (Вернуться)",
+          "next": "noble_result",
+          "comment": "👑 Посмотрим, что теперь"
+        }
+      ]
+    },
+
+    "noble_result": {
+      "speaker": "Рассказчик",
+      "text": "Харихадань, хүгшэн баян ноён болоод, хажуудань слуганар зогсоно.\n(Вернулся — старуха дворянкой стала, слуги вокруг стоят.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/noble.mp3",
+      "dictionary": [
+        {"word": "слуганар", "translation": "слуги"},
+        {"word": "зогсоно", "translation": "стоят"}
+      ],
+      "options": [
+        {
+          "text": "👸 Дальше",
+          "next": "queen_request",
+          "comment": "👑 Чего же ещё ей надо?"
+        }
+      ]
+    },
+
+    "queen_request": {
+      "speaker": "👸 Хүгшэн",
+      "text": "Далайн хатан болохоб! Загаһан өөрөө намайе хүлеэжэ байг!\n(Хочу быть владычицей морской! Пусть рыбка мне служит!)\n\nСтаруха хочет стать царицей моря.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/queen.mp3",
+      "dictionary": [
+        {"word": "хатан", "translation": "царица"},
+        {"word": "далайн", "translation": "морская"},
+        {"word": "хүлеэжэ", "translation": "прислуживая"}
+      ],
+      "options": [
+        {
+          "text": "🌊 Пойти к морю",
+          "next": "sea_storm",
+          "comment": "⚠️ Это уже слишком..."
+        },
+        {
+          "text": "🙏 Уговорить старуху",
+          "next": "fail_queen_wrath",
+          "comment": "😠 Она не слушает"
+        }
+      ]
+    },
+
+    "sea_storm": {
+      "speaker": "🌪️ Рассказчик",
+      "text": "Далай дээрэ айхабтар шуурган болобо.\n(На море страшная буря поднялась.)\n\nВолны чёрные, ветер воет. Рыбка не появляется.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/storm.mp3",
+      "dictionary": [
+        {"word": "шуурган", "translation": "буря"},
+        {"word": "айхабтар", "translation": "страшная"},
+        {"word": "һалхин", "translation": "ветер"}
+      ],
+      "options": [
+        {
+          "text": "⏳ Хүлеэхэ (Ждать)",
+          "next": "sea_storm_wait",
+          "comment": "🌊 Море бушует..."
+        },
+        {
+          "text": "📢 Дуудаха (Позвать)",
+          "next": "sea_storm_call",
+          "comment": "📢 Рыбка, выходи!"
+        }
+      ]
+    },
+
+    "sea_storm_wait": {
+      "speaker": "Рассказчик",
+      "text": "Үбгэн хүлеэнэ.\n(Старик ждёт.)\n\nЧас ждёт, два ждёт. Рыбка не появляется.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/storm.mp3",
+      "dictionary": [
+        {"word": "хүлеэнэ", "translation": "ждёт"}
+      ],
+      "options": [
+        {
+          "text": "🏊 Сүүмхэ орохо (Войти в море)",
+          "next": "enter_sea",
+          "comment": "🌊 Рискованный шаг"
+        },
+        {
+          "text": "🏠 Хариха (Вернуться)",
+          "next": "final_scene",
+          "comment": "😔 Пора домой"
+        }
+      ]
+    },
+
+    "sea_storm_call": {
+      "speaker": "👴 Үбгэн",
+      "text": "Алтан загаһан, гара! Хатан хүсэлтэй!\n(Золотая рыбка, выходи! У царицы просьба!)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/storm.mp3",
+      "dictionary": [
+        {"word": "гара", "translation": "выходи"},
+        {"word": "хүсэлтэй", "translation": "с просьбой"}
+      ],
+      "options": [
+        {
+          "text": "🐠 Ждать ответа",
+          "next": "fish_silent",
+          "comment": "🤫 Тишина..."
+        }
+      ]
+    },
+
+    "fish_silent": {
+      "speaker": "Рассказчик",
+      "text": "Рыбка ничего не ответила, уплыла вглубь. Море утихло.\nЗагаһан юу ч хэлээгүй, гүн рүү сэлэбэ.\n(Рыбка ничего не сказала, вглубь уплыла.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/storm.mp3",
+      "dictionary": [
+        {"word": "юу ч", "translation": "ничего"},
+        {"word": "хэлээгүй", "translation": "не сказала"},
+        {"word": "сэлэбэ", "translation": "уплыла"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Гэртээ хариха (Идти домой)",
+          "next": "final_scene",
+          "comment": "Что же там?"
+        }
+      ]
+    },
+
+    "enter_sea": {
+      "speaker": "🌊 Рассказчик",
+      "text": "Үбгэн далай руу орошо.\n(Старик вошёл в море.)\n\nУһан соо гайхалтай харагдана.\n(Под водой открылся удивительный мир.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/underwater.mp3",
+      "dictionary": [
+        {"word": "орошо", "translation": "вошёл"},
+        {"word": "уһан", "translation": "вода"},
+        {"word": "гайхалтай", "translation": "удивительный"}
+      ],
+      "options": [
+        {
+          "text": "🏊 Үнгэнөөр ябаха (Плыть дальше)",
+          "next": "underwater_city",
+          "comment": "Что там в глубине?"
+        }
+      ]
+    },
+
+    "underwater_city": {
+      "speaker": "🌊 Рассказчик",
+      "text": "Уһан дооро хото харагдана — шулуун гэрнүүд, шүрэн модод.\n(Подводный город виден — каменные дома, коралловые деревья.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/underwater.mp3",
+      "dictionary": [
+        {"word": "хото", "translation": "город"},
+        {"word": "шулуун", "translation": "каменные"},
+        {"word": "шүрэн", "translation": "коралловые"}
+      ],
+      "options": [
+        {
+          "text": "🏰 Хотодо орохо (Войти в город)",
+          "next": "fish_palace",
+          "comment": "Вот это да!"
+        }
+      ]
+    },
+
+    "fish_palace": {
+      "speaker": "👑 Рассказчик",
+      "text": "Тэндэ Алтан загаһан ордондоо һууна.\n(Там Золотая рыбка во дворце сидит.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fish-voice.mp3",
+      "dictionary": [
+        {"word": "ордон", "translation": "дворец"},
+        {"word": "һууна", "translation": "сидит"}
+      ],
+      "options": [
+        {
+          "text": "🙏 Бэеэ мэндэшэлхэ (Поздороваться)",
+          "next": "fish_decision",
+          "comment": "🐠 Рыбка ждёт"
+        }
+      ]
+    },
+
+    "fish_decision": {
+      "speaker": "🐠 Алтан загаһан",
+      "text": "Үбгэн, би шамда һайн һанаатайб.\n(Старик, я к тебе с добром.)\n\nХарин хүгшэниинь хэтэршэ. Буса, гэртээ.\n(Но старуха перешла границу. Иди домой.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fish-voice.mp3",
+      "dictionary": [
+        {"word": "һайн", "translation": "хорошо"},
+        {"word": "һанаатайб", "translation": "с мыслями"},
+        {"word": "хэтэршэ", "translation": "перешла"}
+      ],
+      "options": [
+        {
+          "text": "🏠 Бусаха (Вернуться)",
+          "next": "final_scene",
+          "comment": "Что же там?"
+        }
+      ]
+    },
+
+    "final_scene": {
+      "speaker": "😔 Рассказчик",
+      "text": "Үбгэн хариба.\n(Вернулся старик.)\n\nХарахадань — баян гэр байхагүй, ноён хүгшэншье үгы.\n(Глядит — нет богатого дома, нет дворянки.)\n\nТэрэ зандаа хуушанай тэбшэ хажуудань хэбтэнэ.\n(Перед ним старое корыто лежит.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/final.mp3",
+      "dictionary": [
+        {"word": "хуушан", "translation": "старый"},
+        {"word": "хэбтэнэ", "translation": "лежит"},
+        {"word": "зандаа", "translation": "перед ним"}
+      ],
+      "options": [
+        {
+          "text": "💬 Хүгшэндэ хандаха (Подойти к старухе)",
+          "next": "final_talk",
+          "comment": "Поговорим"
+        },
+        {
+          "text": "😢 Тэбшэдэ һууха (Сесть у корыта)",
+          "next": "epilogue_sad",
+          "comment": "Подумать о вечном"
+        }
+      ]
+    },
+
+    "final_talk": {
+      "speaker": "👵 Хүгшэн",
+      "text": "Юун болобо, үбгэн? Яагаад бидэ эндэбди?\n(Что случилось, старик? Почему мы здесь?)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/final.mp3",
+      "dictionary": [
+        {"word": "яагаад", "translation": "почему"},
+        {"word": "эндэбди", "translation": "мы здесь"}
+      ],
+      "options": [
+        {
+          "text": "📖 Хэтэбшэлһэн гээшэбди (Мы переборщили)",
+          "next": "epilogue_philosophy",
+          "comment": "Мудрое заключение"
+        }
+      ]
+    },
+
+    "epilogue_philosophy": {
+      "speaker": "📚 Автор",
+      "text": "Тэбшэ гээшэ хэрэггүй зүйл гү? Али хүнэй хэрэглэл?\n(Корыто — ненужная вещь? Или нужная?)\n\nВажно не то, что имеешь, а то, как ты это ценишь.\n\nГлавное в сказке — не золото, а мудрость.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/epilogue.mp3",
+      "is_end": true,
+      "dictionary": [
+        {"word": "хэрэггүй", "translation": "ненужный"},
+        {"word": "зүйл", "translation": "вещь"},
+        {"word": "хэрэглэл", "translation": "полезный"}
+      ]
+    },
+
+    "epilogue_sad": {
+      "speaker": "📚 Автор",
+      "text": "Сказка — ложь, да в ней намёк.\nТы прошёл «Алтан загаһан» и выучил бурятские слова!\n\nТеперь ты знаешь, что такое 'тэбшэ' и к чему ведёт жадность.\nСядь у корыта и подумай о вечном...",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/epilogue.mp3",
+      "is_end": true,
+      "dictionary": [
+        {"word": "тэбшэ", "translation": "корыто"},
+        {"word": "жадность", "translation": "эбдэл (порча)"}
+      ]
+    },
+
+    "fail_lazy": {
+      "speaker": "😴 Рассказчик",
+      "text": "Без труда не выловишь и рыбку из пруда.\nХүдэлмэригүйгээр загаһа барихагүйш.\n(Без труда рыбу не поймаешь.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fail.mp3",
+      "dictionary": [
+        {"word": "хүдэлмэри", "translation": "труд"},
+        {"word": "барихагүйш", "translation": "не поймаешь"}
+      ],
+      "options": [
+        {
+          "text": "🔄 Начать заново",
+          "next": "prologue",
+          "comment": "💪 Не сдавайся!"
+        }
+      ]
+    },
+
+    "fail_greed": {
+      "speaker": "💔 Рассказчик",
+      "text": "Жадность лишила магии. Рыбка стала обычной.\nЭбдэлгэ — һайн бэшэ.\n(Жадность — это нехорошо.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fail.mp3",
+      "dictionary": [
+        {"word": "эбдэлгэ", "translation": "жадность"},
+        {"word": "һайн бэшэ", "translation": "нехорошо"}
+      ],
+      "options": [
+        {
+          "text": "🔄 Начать заново",
+          "next": "prologue",
+          "comment": "🎓 Учись на ошибках"
+        }
+      ]
+    },
+
+    "fail_wife_anger": {
+      "speaker": "😠 Рассказчик",
+      "text": "Хүгшэн уурлажа, үбгэнэйнгээ толгай дээрэ халбагаар цохибо.\n(Старуха рассердилась и ударила старика ложкой по голове.)\n\nИ выгнала тебя в тайгу.",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fail.mp3",
+      "dictionary": [
+        {"word": "уурлажа", "translation": "рассердилась"},
+        {"word": "толгай", "translation": "голова"},
+        {"word": "халбага", "translation": "ложка"}
+      ],
+      "options": [
+        {
+          "text": "🔄 Вернуться к сюжету",
+          "next": "house_request",
+          "comment": "🔄 Попробуй ещё раз"
+        }
+      ]
+    },
+
+    "fail_queen_wrath": {
+      "speaker": "👸 Рассказчик",
+      "text": "Старуха ударила старика по щеке и отправила на конюшню.\nХүгшэн уурлажа, үбгэнэйнгээ хазаарта оруулба.\n(Старуха рассердилась и старика в конюшню отправила.)",
+      "image": "/img/ProfCode.png",
+      "audio": "/audio/fail.mp3",
+      "dictionary": [
+        {"word": "хазаар", "translation": "конюшня"},
+        {"word": "оруулба", "translation": "отправила"}
+      ],
+      "options": [
+        {
+          "text": "🌊 Собраться с духом и пойти",
+          "next": "sea_storm",
+          "comment": "💪 Решительность"
+        }
+      ]
+    }
+  }
+}

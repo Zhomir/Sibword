@@ -1,0 +1,225 @@
+/* Global adaptive polish layer (applies after base styles). */
+
+main {
+    padding-top: 84px;
+}
+
+.nav-container {
+    padding: 14px 4%;
+}
+
+.nav-content {
+    gap: 12px;
+}
+
+.nav-links {
+    gap: 18px;
+}
+
+.nav-links a {
+    font-size: 0.82rem;
+}
+
+.btn-login-outline {
+    margin-left: 0;
+}
+
+.hero-content {
+    width: min(960px, 100%);
+}
+
+.features-grid .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    border-radius: 16px;
+}
+
+.teacher-card,
+.auth-card,
+.quest-card,
+.feature-card {
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+}
+
+.teacher-input,
+.teacher-select,
+.teacher-textarea,
+.teacher-file,
+.input-group input {
+    font-size: 16px;
+}
+
+.table-scroll,
+.admin-table-wrap {
+    -webkit-overflow-scrolling: touch;
+}
+
+.teacher-modal-card,
+.auth-card {
+    width: min(100%, 720px);
+}
+
+@media (max-width: 1100px) {
+    main {
+        padding-top: 76px;
+    }
+
+    .nav-container {
+        padding: 10px 14px;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+
+    .nav-links {
+        position: fixed;
+        inset: 64px 0 auto 0;
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+        transform: translateY(-120%);
+        opacity: 0;
+        pointer-events: none;
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 14px 16px 20px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-links a,
+    .nav-links .inline-form,
+    .nav-links .btn-login-outline,
+    .theme-toggle {
+        width: 100%;
+    }
+
+    .nav-links a,
+    .btn-login-inline,
+    .btn-login-outline {
+        margin-left: 0;
+        text-align: left;
+    }
+
+    .theme-toggle {
+        justify-content: center;
+    }
+
+    .hamburger-menu {
+        display: flex;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero-section {
+        min-height: 84vh;
+        height: auto;
+        padding: 110px 0 36px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(1.9rem, 7vw, 3rem);
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 22px;
+    }
+
+    .main-btn,
+    .secondary-btn {
+        width: min(360px, 100%);
+        text-align: center;
+    }
+
+    .features-grid {
+        padding: 56px 14px;
+    }
+
+    .grid {
+        gap: 14px;
+    }
+
+    .feature-card {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .learning-wrapper {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .lesson-controls {
+        position: sticky;
+        bottom: 0;
+        z-index: 4;
+        background: inherit;
+        padding-bottom: 6px;
+    }
+
+    .quest-page {
+        padding: 10px 10px 18px;
+    }
+
+    .quest-card {
+        padding: 16px 12px;
+        border-radius: 14px;
+    }
+
+    .quest-options .option-btn {
+        flex: 1 1 100%;
+    }
+
+    .teacher-toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        bottom: 10px;
+    }
+}
+
+@media (max-width: 520px) {
+    main {
+        padding-top: 70px;
+    }
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    .teacher-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .teacher-card,
+    .teacher-editor-card {
+        padding: 12px;
+    }
+
+    .auth-page {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .auth-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+}

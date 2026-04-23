@@ -1,0 +1,36 @@
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    color: var(--text-on-dark);
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.theme-toggle span {
+    font-weight: 600;
+}
+
+main {
+    padding-top: 88px;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.btn-login-inline {
+    background: none;
+    cursor: pointer;
+}

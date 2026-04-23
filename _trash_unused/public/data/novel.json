@@ -1,0 +1,36 @@
+{
+  "start_node": "scene_1",
+  "scenes": {
+    "scene_1": {
+      "name": "Баир",
+      "character_img": "/img/char_bair.png",
+      "text": "Сайн байна! (Привет!) Добро пожаловать в Бурятию. Ты понимаешь, что я сейчас сказал?",
+      "options": [
+        { "text": "Сайн байна!", "next": "scene_2_success", "comment": "Верно! Ты поздоровался в ответ." },
+        { "text": "Баяртай!", "next": "scene_1_fail", "comment": "Ой, это значит 'До свидания'. Рановато прощаться!" }
+      ]
+    },
+    "scene_1_fail": {
+      "name": "Баир",
+      "character_img": "/img/char_bair_confused.png",
+      "text": "Почему ты сразу уходишь? Давай попробуем еще раз поздороваться.",
+      "options": [
+        { "text": "Давай попробуем", "next": "scene_1" }
+      ]
+    },
+    "scene_2_success": {
+      "name": "Баир",
+      "character_img": "/img/char_bair_happy.png",
+      "text": "Отлично! Шинии нэрэ хэн бэ? (Как тебя зовут?)",
+      "options": [
+        { "text": "Минии нэрэ... [Назвать имя]", "next": "final" }
+      ]
+    },
+    "final": {
+      "name": "Система",
+      "character_img": "/img/success_badge.png",
+      "text": "Первое знакомство прошло успешно! Ты готов к полноценному обучению.",
+      "is_end": true
+    }
+  }
+}
