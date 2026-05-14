@@ -1,69 +1,84 @@
-﻿            <h2 class="teacher-section-title">Личный кабинет студента</h2>
-            <div class="teacher-card">
-                <h3 class="teacher-section-title">Твой прогресс</h3>
-                <p>Выполнено уроков: <strong>{{ $userProgress['completed_lessons'] }}</strong></p>
-                <p>Очки опыта (XP): <strong>{{ $userProgress['xp'] }}</strong></p>
-                <div class="teacher-progress">
-                    <div class="teacher-progress-fill js-progress-fill" data-progress="{{ min($userProgress['completed_lessons'] * 10, 100) }}"></div>
+﻿            <section class="student-profile-hero teacher-card">
+                <div>
+                    <div class="student-profile-kicker">Профиль студента</div>
+                    <h2 class="teacher-section-title student-profile-title">Личный кабинет</h2>
+                    <p class="teacher-muted student-profile-copy">Отслеживайте прогресс по курсам, достижения и точки роста в одном экране.</p>
+                </div>
+                <a href="{{ route('student.catalog') }}" class="btn btn-primary btn-sm">Перейти в каталог</a>
+            </section>
+
+            <section class="student-kpi-grid">
+                <article class="student-kpi-card teacher-card">
+                    <div class="student-kpi-label">Пройдено уроков</div>
+                    <div class="student-kpi-value">{{ (int) ($userProgress['completed_lessons'] ?? 0) }}</div>
+                    <div class="student-kpi-hint">Суммарно по активным курсам</div>
+                </article>
+                <article class="student-kpi-card teacher-card">
+                    <div class="student-kpi-label">Опыт</div>
+                    <div class="student-kpi-value">{{ (int) ($userProgress['xp'] ?? 0) }} XP</div>
+                    <div class="student-kpi-hint">Начисляется за завершение уроков</div>
+                </article>
+                <article class="student-kpi-card teacher-card">
+                    <div class="student-kpi-label">Получено достижений</div>
+                    <div class="student-kpi-value">{{ count($studentAchievements ?? []) }}</div>
+                    <div class="student-kpi-hint">Награды за активность и прогресс</div>
+                </article>
+            </section>
+
+            <div class="teacher-card student-progress-card">
+                <div class="student-progress-head">
+                    <h3 class="teacher-section-title">Общий прогресс</h3>
+                    <span class="student-progress-badge">{{ min((int) (($userProgress['completed_lessons'] ?? 0) * 10), 100) }}%</span>
+                </div>
+                <div class="teacher-progress student-progress-bar">
+                    <div class="teacher-progress-fill js-progress-fill" data-progress="{{ min((int) (($userProgress['completed_lessons'] ?? 0) * 10), 100) }}"></div>
                 </div>
             </div>
 
             <div class="teacher-card">
-                <h3 class="teacher-section-title">Мои достижения</h3>
-                <div class="teacher-course-card-meta">
-                    <span>Получено: {{ count($studentAchievements ?? []) }}</span>
-                </div>
-                @php
-                    $goalPool = collect($studentAchievementProgress ?? [])
-                        ->map(function ($goal) {
-                            $current = (int) ($goal['current'] ?? 0);
-                            $target = max(1, (int) ($goal['target'] ?? 1));
-                            $remain = max(0, $target - $current);
-                            $goal['remain'] = $remain;
-                            $goal['target'] = $target;
-                            $goal['current'] = $current;
-                            return $goal;
-                        });
-                    $nextGoals = $goalPool
-                        ->filter(fn ($goal) => (int) ($goal['remain'] ?? 0) > 0)
-                        ->sortBy('remain')
-                        ->take(3);
-                    if ($nextGoals->isEmpty()) {
-                        $nextGoals = $goalPool->sortByDesc('target')->take(3);
-                    }
-                @endphp
-                <div class="teacher-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0 16px;">
-                    @foreach($nextGoals as $goal)
-                        @php
-                            $goalCurrent = (int) ($goal['current'] ?? 0);
-                            $goalTarget = max(1, (int) ($goal['target'] ?? 1));
-                            $goalPercent = (int) min(100, round(($goalCurrent / $goalTarget) * 100));
-                            $goalRemain = max(0, $goalTarget - $goalCurrent);
-                        @endphp
-                        <div class="teacher-segment" style="margin-bottom: 0;">
-                            <div class="teacher-segment-title">{{ $goal['title'] ?? 'Цель' }}</div>
-                            <div class="teacher-meta-text" style="margin-top: 4px;">{{ $goalCurrent }} / {{ $goalTarget }} {{ $goal['unit'] ?? '' }}</div>
-                            <div class="teacher-progress" style="margin-top: 8px;">
-                                <div class="teacher-progress-fill" style="width: {{ $goalPercent }}%;"></div>
-                            </div>
-                            <div class="teacher-meta-text" style="margin-top: 6px;">
-                                @if($goalRemain > 0)
-                                    Осталось: {{ $goalRemain }} {{ $goal['unit'] ?? '' }}
-                                @else
-                                    Цель выполнена
-                                @endif
-                            </div>
+                <h3 class="teacher-section-title">Текущий курс</h3>
+                @if(!empty($studentCurrentCourseSummary))
+                    @php
+                        $currentCourse = $studentCurrentCourseSummary;
+                    @endphp
+                    <div class="student-goals-grid">
+                        <div class="student-goal-card teacher-segment">
+                            <div class="teacher-segment-title">Проходимый курс</div>
+                            <div class="teacher-meta-text">{{ $currentCourse['course_title'] ?? 'Курс' }}</div>
                         </div>
-                    @endforeach
-                </div>
+                        <div class="student-goal-card teacher-segment">
+                            <div class="teacher-segment-title">Пройдено уроков</div>
+                            <div class="teacher-meta-text">{{ (int) ($currentCourse['completed_lessons'] ?? 0) }} / {{ (int) ($currentCourse['total_lessons'] ?? 0) }}</div>
+                        </div>
+                        <div class="student-goal-card teacher-segment">
+                            <div class="teacher-segment-title">Осталось уроков</div>
+                            <div class="teacher-meta-text">{{ (int) ($currentCourse['remaining_lessons'] ?? 0) }}</div>
+                        </div>
+                    </div>
+                @else
+                    <div class="teacher-muted">Пока нет активного курса. Выберите курс в каталоге, чтобы видеть прогресс.</div>
+                @endif
+            </div>
+
+            <div class="teacher-card">
+                <h3 class="teacher-section-title">Мои достижения</h3>
                 <div class="teacher-courses-grid">
                     @forelse(($studentAchievements ?? []) as $achievement)
-                        <article class="teacher-course-card">
+                        <article class="teacher-course-card student-achievement-card">
                             <div class="teacher-course-card-body">
-                                <div class="teacher-course-card-kicker">Достижение</div>
+                                <div class="teacher-course-card-kicker">
+                                    @if(($achievement['is_system'] ?? true) === false)
+                                        Курсовая ачивка
+                                    @else
+                                        Системная ачивка
+                                    @endif
+                                </div>
                                 <h4 class="course-module-title">{{ $achievement['title'] }}</h4>
                                 <p class="teacher-course-card-copy">{{ $achievement['description'] !== '' ? $achievement['description'] : 'Описание не задано.' }}</p>
                                 <div class="teacher-course-card-meta">
+                                    @if(($achievement['is_system'] ?? true) === false && !empty($achievement['course_title']))
+                                        <span>Курс: {{ $achievement['course_title'] }}</span>
+                                    @endif
                                     <span>+{{ (int) ($achievement['xp_reward'] ?? 0) }} XP</span>
                                     <span>{{ $achievement['achieved_at'] ?? 'только что' }}</span>
                                 </div>
@@ -145,7 +160,7 @@
                                                         <h4 class="lesson-card-title">{{ $lessonItem['lesson']['title'] }}</h4>
                                                         <small class="lesson-card-meta">Шагов: {{ $lessonItem['lesson']['steps_count'] ?? count($lessonItem['lesson']['steps'] ?? []) }}</small>
                                                     </div>
-                                                    <a href="{{ route('teacher.indes', ['page' => 'lesson_view', 'id' => $lessonItem['id']]) }}" class="btn btn-primary">Открыть урок</a>
+                                                    <a href="{{ route('lesson.view', ['id' => $lessonItem['id']]) }}" class="btn btn-primary">Открыть урок</a>
                                                 </div>
                                             @empty
                                                 <div class="teacher-muted">В этом модуле пока нет уроков.</div>
@@ -162,38 +177,3 @@
                     @endforelse
                 </div>
             </div>
-
-            <div class="teacher-card">
-                <h3 class="teacher-section-title">Доступные курсы</h3>
-                <div class="teacher-courses-grid">
-                    @forelse(($availableCourses ?? []) as $availableCourse)
-                        @php
-                            $availableStats = $courseRatings[(int) $availableCourse['id']] ?? ['avg' => 0, 'count' => 0];
-                        @endphp
-                        <article class="teacher-course-card">
-                            <div class="teacher-course-card-body">
-                                <div class="teacher-course-card-kicker">Курс</div>
-                                <h3 class="teacher-course-card-title">{{ $availableCourse['title'] }}</h3>
-                                <p class="teacher-course-card-copy">
-                                    {{ $availableCourse['description'] !== '' ? $availableCourse['description'] : 'Описание пока не добавлено.' }}
-                                </p>
-                                <div class="teacher-course-card-meta">
-                                    <span>{{ $availableCourse['modules_count'] }} модулей</span>
-                                    <span>{{ $availableCourse['level'] !== '' ? $availableCourse['level'] : 'Уровень не указан' }}</span>
-                                    <span>Рейтинг: {{ number_format((float) ($availableStats['avg'] ?? 0), 2) }}</span>
-                                    <span>Оценок: {{ (int) ($availableStats['count'] ?? 0) }}</span>
-                                </div>
-                            </div>
-                            <div class="teacher-course-card-actions">
-                                <form action="{{ route('courses.enroll', ['course' => $availableCourse['id']]) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm">Выбрать курс</button>
-                                </form>
-                            </div>
-                        </article>
-                    @empty
-                        <div class="teacher-muted">Свободных курсов для выбора сейчас нет.</div>
-                    @endforelse
-                </div>
-            </div>
-

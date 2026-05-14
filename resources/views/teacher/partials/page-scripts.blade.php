@@ -1,9 +1,9 @@
 ﻿@if ($page === 'lesson_view')
 @php
     $lessonViewData = [
-        'steps' => $lesson['steps'] ?? [],
+        'steps' => $lessons[$lessonId]['steps'] ?? [],
         'lessonId' => (int) ($lessonId ?? 0),
-        'completeUrl' => route('teacher.indes', ['page' => 'student_dashboard']),
+        'completeUrl' => route('student.dashboard'),
         'completeRequestUrl' => route('teacher.indes.handle'),
         'csrfToken' => csrf_token(),
     ];
@@ -163,7 +163,7 @@
     }
 })();
 </script>
-@elseif ($page === 'student_dashboard')
+@elseif (in_array($page, ['student_dashboard', 'student_profile', 'student_progress'], true))
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.js-progress-fill').forEach((el) => {
@@ -172,5 +172,79 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.width = `${clamped}%`;
     });
 });
+</script>
+@elseif ($page === 'teacher_achievements')
+<script>
+(() => {
+    const form = document.getElementById('teacher-achievement-form');
+    const list = document.getElementById('teacher-achievements-list');
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    const addUrl = @json(route('api.achievement.add'));
+    const deleteUrl = @json(route('api.achievement.delete'));
+
+    const notify = (message) => {
+        const toast = document.getElementById('teacherToast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.remove('is-hidden', 'is-error');
+        setTimeout(() => toast.classList.add('is-hidden'), 2200);
+    };
+
+    form?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = new FormData(form);
+
+        try {
+            const response = await fetch(addUrl, {
+                method: 'POST',
+                body: payload,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrf,
+                },
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success) {
+                const msg = data?.message || 'Не удалось создать ачивку.';
+                throw new Error(msg);
+            }
+            notify(data.message || 'Ачивка создана.');
+            window.location.reload();
+        } catch (error) {
+            notify(error.message || 'Ошибка запроса.');
+        }
+    });
+
+    list?.addEventListener('click', async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (!target.classList.contains('js-delete-course-achievement')) return;
+        const achievementId = Number(target.dataset.achievementId || 0);
+        if (!achievementId) return;
+
+        try {
+            const fd = new FormData();
+            fd.append('achievement_id', String(achievementId));
+            const response = await fetch(deleteUrl, {
+                method: 'POST',
+                body: fd,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrf,
+                },
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success) {
+                throw new Error(data?.message || 'Не удалось удалить ачивку.');
+            }
+            notify(data.message || 'Ачивка удалена.');
+            window.location.reload();
+        } catch (error) {
+            notify(error.message || 'Ошибка запроса.');
+        }
+    });
+})();
 </script>
 @endif

@@ -1,4 +1,4 @@
-@php
+﻿@php
     $analytics = $teacherAnalytics ?? ['summary' => [], 'top_steps' => [], 'top_lessons' => [], 'risk_lessons' => [], 'filters' => [], 'courses' => []];
     $analyticsSummary = $analytics['summary'] ?? [];
     $topSteps = $analytics['top_steps'] ?? [];
@@ -14,8 +14,7 @@
         <span class="teacher-muted">По вашим курсам</span>
     </h3>
 
-    <form action="{{ route('teacher.indes') }}" method="GET" class="teacher-inline-input teacher-field">
-        <input type="hidden" name="page" value="teacher_panel">
+    <form action="{{ route('teacher.panel.page') }}" method="GET" class="teacher-inline-input teacher-field teacher-analytics-filters">
         <div>
             <label class="teacher-label">Курс</label>
             <select name="analytics_course_id" class="teacher-select">
@@ -41,7 +40,7 @@
         </div>
     </form>
 
-    <div class="teacher-courses-grid">
+    <div class="teacher-courses-grid teacher-analytics-summary-grid">
         <article class="teacher-course-card">
             <div class="teacher-course-card-body">
                 <div class="teacher-course-card-kicker">Сводка ответов</div>
@@ -64,7 +63,7 @@
         </article>
     </div>
 
-    <div class="teacher-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-top: 14px;">
+    <div class="teacher-grid teacher-analytics-grid">
         <section class="teacher-segment">
             <div class="teacher-segment-head">
                 <div>

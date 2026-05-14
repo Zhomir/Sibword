@@ -148,7 +148,6 @@ function bindGlobalListeners() {
         }
         if (action === 'filter-dictionary-options') {
             dictionaryFilterQuery = (target.value || '').trim().toLowerCase();
-            renderDictionaryOptions();
         }
         if (action === 'render-step-media-preview') {
             renderStepMediaPreview();
@@ -176,7 +175,6 @@ function bindInputActions() {
             const action = el.getAttribute('data-input-action');
             if (action === 'filter-dictionary-options') {
                 dictionaryFilterQuery = (el.value || '').trim().toLowerCase();
-                renderDictionaryOptions();
             }
             if (action === 'render-step-media-preview') {
                 renderStepMediaPreview();
@@ -341,6 +339,7 @@ async function loadLesson() {
         : `${cmsUrls.getLessonBase}/${encodeURIComponent(String(currentLessonId))}`;
 
     try {
+        showToast('\u0417\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u043C \u0443\u0440\u043E\u043A...', 'info');
         const data = await apiRequest(lessonUrl, undefined, '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0443\u0440\u043E\u043A.', 'GET');
         document.getElementById('lessonTitle').value = data.title || '';
         currentCourseId = data.course_id || getDefaultCourseId();
@@ -352,6 +351,7 @@ async function loadLesson() {
         renderStepsList();
         setLessonEditorVisible(true);
         setPreviewButtonVisible(true);
+        showToast('\u0423\u0440\u043E\u043A \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D.', 'success');
     } catch (error) {
         showToast(error.message || '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0443\u0440\u043E\u043A.', 'error');
     }
@@ -623,9 +623,34 @@ async function saveLesson() {
         showToast('Сначала выберите курс и модуль.', 'error');
         return;
     }
-    const payload = { id: Number(currentLessonId), title, course_id: Number(courseId), module_id: Number(moduleId), steps: currentSteps };
+    const previousLessonId = Number(currentLessonId);
+    const payload = { id: previousLessonId, title, course_id: Number(courseId), module_id: Number(moduleId), steps: currentSteps };
     try {
-        await apiRequest(cmsUrls.saveLesson, payload, '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0443\u0440\u043E\u043A');
+        showToast('\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u043C \u0443\u0440\u043E\u043A...', 'info');
+        const data = await apiRequest(cmsUrls.saveLesson, payload, '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0443\u0440\u043E\u043A');
+        const savedLessonId = Number(data?.lesson_id || 0);
+        if (savedLessonId > 0) {
+            const selector = document.getElementById('lessonSelector');
+            const oldOption = selector
+                ? Array.from(selector.options).find((option) => Number(option.value || 0) === previousLessonId)
+                : null;
+
+            if (oldOption) {
+                oldOption.value = String(savedLessonId);
+                oldOption.removeAttribute('data-temporary');
+                oldOption.dataset.courseId = String(courseId);
+                oldOption.dataset.moduleId = String(moduleId);
+                oldOption.textContent = `${title} · ${(courseTitleMap[Number(courseId)] || '')} / ${(moduleTitleMap[Number(moduleId)] || '')}`;
+            } else if (selector) {
+                appendLessonOption(savedLessonId, title, courseId, moduleId, false);
+            }
+
+            currentLessonId = String(savedLessonId);
+            if (selector) {
+                syncLessonSelector(String(savedLessonId));
+                selector.value = String(savedLessonId);
+            }
+        }
         showToast('\u0423\u0440\u043E\u043A \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D.', 'success');
     } catch (error) {
         showToast(error.message || '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0443\u0440\u043E\u043A.', 'error');
@@ -659,7 +684,13 @@ function previewLesson() {
         return;
     }
 
-    const previewUrl = `${window.location.pathname}?page=lesson_view&id=${encodeURIComponent(String(lessonId))}`;
+    const previewParams = new URLSearchParams({
+        page: 'lesson_view',
+        id: String(lessonId),
+        return_page: 'teacher_panel',
+        edit_lesson_id: String(lessonId),
+    });
+    const previewUrl = `${window.location.pathname}?${previewParams.toString()}`;
     window.open(previewUrl, '_blank', 'noopener');
 }
 
@@ -727,9 +758,9 @@ async function submitDictionaryForm(event) {
     }
     setBusyState(submitButton, true);
     try {
+        showToast('\u0414\u043E\u0431\u0430\u0432\u043B\u044F\u0435\u043C \u0441\u043B\u043E\u0432\u043E...', 'info');
         const data = await apiRequest(cmsUrls.addWord, { word, translation }, '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0441\u043B\u043E\u0432\u043E');
         teacherDictionary.push({ id: data.entry.id, word: data.entry.word, translation: data.entry.translation });
-        renderDictionaryOptions();
         document.getElementById('newWord').value = '';
         document.getElementById('newTranslation').value = '';
         showToast('\u0421\u043B\u043E\u0432\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E.', 'success');
@@ -804,6 +835,19 @@ function initTeacherActions() {
         });
         renderStageSummaries();
         renderDictionaryOptions();
+        const initialLessonId = new URLSearchParams(window.location.search).get('edit_lesson_id');
+        if (initialLessonId) {
+            const lessonSelector = document.getElementById('lessonSelector');
+            const option = lessonSelector
+                ? Array.from(lessonSelector.options).find((item) => item.value === String(initialLessonId))
+                : null;
+            if (lessonSelector && option) {
+                lessonSelector.value = option.value;
+                syncModuleSelector(option.dataset.moduleId || '');
+                lessonSelector.value = option.value;
+                loadLesson();
+            }
+        }
         document.getElementById('addWordForm')?.addEventListener('submit', submitDictionaryForm);
         document.getElementById('quizOptionsList')?.addEventListener('input', (event) => {
             if (event.target?.matches('[data-quiz-index]')) updateQuizOptionInput(event);

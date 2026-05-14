@@ -1,15 +1,15 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
-<div id="quest-root" class="quest-page" data-url="{{ asset('data/quest.json') }}">
+<div id="quest-root" class="quest-page" data-url="{{ route('api.quest.show', ['code' => 'altan_zagalan']) }}">
     <div class="quest-shell">
         <div class="feature-card quest-card">
             <div class="quest-layout">
                 <section class="quest-story">
                     <div class="quest-toolbar quest-toolbar--in-card">
-                        <button id="quest-back" class="option-btn quest-toolbar-btn" title="Назад" aria-label="Назад" disabled>↩️</button>
+                        <button id="quest-back" class="option-btn quest-toolbar-btn" title="Назад" aria-label="Назад" disabled>↩</button>
                         <button id="quest-audio-toggle" class="option-btn quest-toolbar-btn" title="Звук" aria-label="Звук">🔊</button>
-                        <button id="quest-restart" class="option-btn quest-toolbar-btn" title="Заново" aria-label="Заново">🔄</button>
+                        <button id="quest-restart" class="option-btn quest-toolbar-btn" title="Заново" aria-label="Заново">↻</button>
                     </div>
 
                     <div id="quest-image" class="quest-image"></div>

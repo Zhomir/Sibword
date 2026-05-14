@@ -27,7 +27,7 @@
                 <div class="teacher-card teacher-editor-card">
                     <h3 class="teacher-heading-row">
                         Редактор
-                        <a href="{{ route('teacher.indes', ['page' => 'teacher_courses']) }}" class="btn btn-outline btn-sm">Мои курсы</a>
+                        <a href="{{ route('teacher.courses.page') }}" class="btn btn-outline btn-sm">Мои курсы</a>
                     </h3>
 
                     <div class="teacher-stage teacher-field">
@@ -320,4 +320,5 @@
                     </div>
                 </div>
             </div>
+
 

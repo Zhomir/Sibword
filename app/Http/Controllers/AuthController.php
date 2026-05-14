@@ -13,8 +13,8 @@ class AuthController extends Controller
     {
         return match ($user->role) {
             'admin' => route('admin.index'),
-            'teacher' => route('teacher.indes', ['page' => 'teacher_panel']),
-            default => route('teacher.indes', ['page' => 'student_dashboard']),
+            'teacher' => route('teacher.home'),
+            default => route('student.dashboard'),
         };
     }
 
@@ -57,9 +57,11 @@ class AuthController extends Controller
         return back()->withErrors(['email' => 'Неверные данные для входа']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }

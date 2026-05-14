@@ -131,6 +131,7 @@ class QuestEngine {
 
         this.speakerEl.textContent = node.speaker || 'Рассказчик';
         const dictionary = Array.isArray(node.dictionary) ? node.dictionary : [];
+        this.textEl.classList.remove('quest-state-loading', 'quest-state-error');
         this.textEl.innerHTML = this.highlightDictionaryWords(node.text || '', dictionary);
         this.commentEl.textContent = '';
         this.renderImage(node.image || null);
@@ -153,7 +154,8 @@ class QuestEngine {
         if (!Array.isArray(node.options) || !node.options.length) {
             const noOptions = document.createElement('div');
             noOptions.textContent = 'Нет доступных вариантов ответа.';
-            noOptions.style.color = '#fff';
+            noOptions.style.color = 'inherit';
+            noOptions.style.opacity = '0.9';
             this.optionsEl.appendChild(noOptions);
             this.updateBackButton();
             return;

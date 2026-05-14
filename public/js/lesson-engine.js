@@ -43,6 +43,7 @@
         if (!Array.isArray(this.lessonData.steps)) {
             this.lessonData.steps = [];
         }
+        this.lessonData.steps = this.lessonData.steps.filter((step) => this.isRenderableStep(step));
 
         this.updateLessonMeta();
         this.updateHpMeta();
@@ -67,6 +68,8 @@
     }
 
     renderEmptyState() {
+        this.theoryBlock.classList.remove('is-hidden');
+        this.practiceBlock.classList.add('is-hidden');
         this.theoryBlock.style.display = 'block';
         this.practiceBlock.style.display = 'none';
         this.theoryBlock.innerHTML = `
@@ -113,9 +116,13 @@
     }
 
     showTheory(data) {
+        this.theoryBlock.classList.remove('is-hidden');
+        this.practiceBlock.classList.add('is-hidden');
         this.theoryBlock.style.display = 'block';
         this.practiceBlock.style.display = 'none';
         this.nextBtn.textContent = 'Продолжить';
+        this.nextBtn.style.visibility = '';
+        this.nextBtn.disabled = false;
 
         if (data.type === 'theory') {
             const media = data.media || {};
@@ -124,14 +131,14 @@
             const videoHtml = media.video_file_url
                 ? `<video controls preload="metadata" class="lesson-media-video"><source src="${media.video_file_url}"></video>`
                 : (media.video_url ? `<a href="${media.video_url}" target="_blank" rel="noopener noreferrer" class="lesson-media-link">Открыть видео</a>` : '');
+            const theoryMediaHtml = [imageHtml, audioHtml, videoHtml].filter(Boolean).join('');
 
             this.theoryBlock.innerHTML = `
                 <div class="lesson-theory-card animate-fade-in">
-                    ${imageHtml}
                     <div class="lesson-theory-kicker">Теория</div>
                     <h2 class="lesson-theory-title">${data.title || 'Теоретический блок'}</h2>
                     <div class="lesson-theory-content">${data.content || ''}</div>
-                    <div class="lesson-theory-media">${audioHtml}${videoHtml}</div>
+                    ${theoryMediaHtml ? `<div class="lesson-theory-media lesson-media-stack">${theoryMediaHtml}</div>` : ''}
                 </div>
             `;
             return;
@@ -182,13 +189,23 @@
     }
 
     showPractice(data) {
+        this.theoryBlock.classList.add('is-hidden');
+        this.practiceBlock.classList.remove('is-hidden');
         this.theoryBlock.style.display = 'none';
         this.practiceBlock.style.display = 'block';
         this.nextBtn.textContent = 'Проверить';
         this.nextBtn.style.visibility = '';
         this.nextBtn.disabled = false;
         const retryBadge = this.retryMode ? '<p class="retry-badge">Работа над ошибками</p>' : '';
-        this.practiceBlock.innerHTML = retryBadge + `<h2 class="task-title">${data.question}</h2>`;
+        const safeQuestion = this.escapeHtml((data.question || '').trim() || 'Практическое задание');
+        const media = data.media || {};
+        const mediaHtml = [
+            media.image_url ? `<img src="${media.image_url}" alt="" class="lesson-media-image">` : '',
+            media.audio_url ? `<audio controls preload="none" class="lesson-media-audio"><source src="${media.audio_url}"></audio>` : '',
+            media.video_file_url ? `<video controls preload="metadata" class="lesson-media-video"><source src="${media.video_file_url}"></video>` : '',
+            (!media.video_file_url && media.video_url) ? `<a href="${media.video_url}" target="_blank" rel="noopener noreferrer" class="lesson-media-link">Открыть видео</a>` : ''
+        ].filter(Boolean).join('');
+        this.practiceBlock.innerHTML = retryBadge + (mediaHtml ? `<div class="lesson-media-stack">${mediaHtml}</div>` : '') + `<h2 class="task-title">${safeQuestion}</h2>`;
 
         const container = document.createElement('div');
         container.className = `task-container task-${data.task_type}`;
@@ -907,6 +924,31 @@
         } catch (error) {
             console.warn('Complete lesson request failed', error);
         }
+    }
+
+    escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    isRenderableStep(step) {
+        if (!step || typeof step !== 'object') return false;
+        if (step.type === 'theory' || step.type === 'dialog') return true;
+        if (step.type !== 'task') return false;
+
+        const taskType = String(step.task_type || '');
+        if (taskType === 'multiple_choice') {
+            const options = Array.isArray(step.options)
+                ? step.options.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            return options.length >= 2;
+        }
+
+        return true;
     }
 }
 

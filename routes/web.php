@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LessonForumController;
 use App\Http\Controllers\OpenDayController;
+use App\Http\Controllers\QuestApiController;
 use App\Http\Controllers\TeacherAssetController;
 use App\Http\Controllers\TeacherCmsApiController;
 use App\Http\Controllers\TeacherPrototypeController;
@@ -23,6 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/open-day', [OpenDayController::class, 'index'])->name('open.day');
 Route::view('/quest', 'open-day.quest')->name('quest');
+Route::get('/api/quest/{code?}', [QuestApiController::class, 'show'])->name('api.quest.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function (Request $request) {
@@ -30,15 +32,15 @@ Route::middleware(['auth'])->group(function () {
 
         return match ($user?->role) {
             'admin' => redirect()->route('admin.index'),
-            'teacher' => redirect()->route('teacher.indes', ['page' => 'teacher_panel']),
-            default => redirect()->route('teacher.indes', ['page' => 'student_dashboard']),
+            'teacher' => redirect()->route('teacher.home'),
+            default => redirect()->route('student.dashboard'),
         };
     })->name('dashboard');
 });
 
 Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/courses', function () {
-        return redirect()->route('teacher.indes', ['page' => 'student_dashboard']);
+        return redirect()->route('student.catalog');
     })->name('courses.index');
 
     Route::post('/courses/{course}/select', [TeacherPrototypeController::class, 'enrollCourse'])
@@ -48,13 +50,14 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::post('/courses/{course}/review', [TeacherPrototypeController::class, 'storeCourseReview'])
         ->name('courses.review.store');
 
-    Route::get('/lesson/{id}', function ($id) {
-        return redirect()->route('teacher.indes', ['page' => 'lesson_view', 'id' => $id]);
-    })->name('lessons.show');
+    Route::get('/lesson/{id}', [TeacherPrototypeController::class, 'lessonView'])->name('lessons.show');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/users', [AdminController::class, 'usersPage'])->name('admin.users.page');
+    Route::get('/admin/knowledge-page', [AdminController::class, 'knowledgePage'])->name('admin.knowledge.page');
+    Route::get('/admin/moderation', [AdminController::class, 'moderationPage'])->name('admin.moderation.page');
     Route::post('/admin/users/{user}/role', [AdminController::class, 'updateUserRole'])->name('admin.users.role');
     Route::post('/admin/knowledge', [AdminController::class, 'storeKnowledge'])->name('admin.knowledge.store');
     Route::post('/admin/knowledge/{dictionaryEntry}/delete', [AdminController::class, 'destroyKnowledge'])->name('admin.knowledge.delete');
@@ -67,7 +70,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:student,teacher'])->group(function () {
-    Route::get('/teacher/indes', [TeacherPrototypeController::class, 'index'])->name('teacher.indes');
+    Route::get('/student/dashboard', [TeacherPrototypeController::class, 'studentDashboard'])->name('student.dashboard');
+    Route::get('/student/profile', [TeacherPrototypeController::class, 'studentProfilePage'])->name('student.profile');
+    Route::post('/student/profile/update', [TeacherPrototypeController::class, 'updateStudentProfile'])->name('student.profile.update');
+    Route::get('/student/courses', [TeacherPrototypeController::class, 'studentCoursesPage'])->name('student.courses');
+    Route::get('/student/progress', [TeacherPrototypeController::class, 'studentProgressPage'])->name('student.progress');
+    Route::get('/student/catalog', [TeacherPrototypeController::class, 'studentCatalog'])->name('student.catalog');
+    Route::get('/lesson-view/{id}', [TeacherPrototypeController::class, 'lessonView'])->name('lesson.view');
+    Route::get('/teacher/index', [TeacherPrototypeController::class, 'index'])->name('teacher.index');
+    Route::post('/teacher/index', [TeacherPrototypeController::class, 'handle'])->name('teacher.index.handle');
+    Route::get('/teacher/indes', fn () => redirect()->route('teacher.index'))->name('teacher.indes');
     Route::post('/teacher/indes', [TeacherPrototypeController::class, 'handle'])->name('teacher.indes.handle');
     Route::post('/lesson/{lessonId}/comment', [LessonForumController::class, 'storeLessonComment'])->name('lesson.comment.store');
     Route::post('/lesson/{lessonId}/forum/toggle-lock', [LessonForumController::class, 'toggleLessonCommentsLock'])->name('lesson.forum.lesson.toggleLock');
@@ -84,6 +96,17 @@ Route::middleware(['auth', 'role:student,teacher'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:teacher'])->group(function () {
+    Route::get('/teacher', [TeacherPrototypeController::class, 'teacherHomePage'])->name('teacher.home');
+    Route::get('/teacher/analytics', [TeacherPrototypeController::class, 'teacherAnalyticsPage'])->name('teacher.analytics.page');
+    Route::get('/teacher/courses', [TeacherPrototypeController::class, 'teacherCoursesPage'])->name('teacher.courses.page');
+    Route::get('/teacher/editor', [TeacherPrototypeController::class, 'teacherPanelPage'])->name('teacher.panel.page');
+    Route::get('/teacher/achievements', [TeacherPrototypeController::class, 'teacherAchievementsPage'])->name('teacher.achievements.page');
+
+    Route::post('/teacher/courses/{course}/toggle-publication', [TeacherPrototypeController::class, 'toggleCoursePublication'])
+        ->name('teacher.courses.togglePublication');
+    Route::post('/teacher/courses/{course}/delete', [TeacherPrototypeController::class, 'deleteCourse'])
+        ->name('teacher.courses.delete');
+
     Route::post('/teacher/assets/upload', [TeacherAssetController::class, 'upload'])
         ->name('teacher.assets.upload');
 
@@ -94,4 +117,6 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::post('/api/module/add', [TeacherCmsApiController::class, 'addModule'])->name('api.module.add');
     Route::post('/api/dictionary/add', [TeacherCmsApiController::class, 'addWord'])->name('api.dictionary.add');
     Route::post('/api/dictionary/delete', [TeacherCmsApiController::class, 'deleteWord'])->name('api.dictionary.delete');
+    Route::post('/api/achievement/add', [TeacherPrototypeController::class, 'addCourseAchievement'])->name('api.achievement.add');
+    Route::post('/api/achievement/delete', [TeacherPrototypeController::class, 'deleteCourseAchievement'])->name('api.achievement.delete');
 });

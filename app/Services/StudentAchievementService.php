@@ -69,6 +69,8 @@ class StudentAchievementService
                 ],
             );
         }
+
+        $this->syncCourseCompletionAchievements($userId);
     }
 
     public function achievementsPayload(int $userId): array
@@ -79,6 +81,7 @@ class StudentAchievementService
 
         return Achievement::query()
             ->join('user_achievements as ua', 'ua.achievement_id', '=', 'achievements.id')
+            ->leftJoin('courses', 'courses.id', '=', 'achievements.course_id')
             ->where('ua.user_id', $userId)
             ->orderByDesc('ua.achieved_at')
             ->select([
@@ -86,6 +89,9 @@ class StudentAchievementService
                 'achievements.title',
                 'achievements.description',
                 'achievements.xp_reward',
+                'achievements.is_system',
+                'achievements.course_id',
+                'courses.title as course_title',
                 'ua.achieved_at',
             ])
             ->get()
@@ -94,6 +100,9 @@ class StudentAchievementService
                 'title' => (string) $row->title,
                 'description' => (string) ($row->description ?? ''),
                 'xp_reward' => (int) ($row->xp_reward ?? 0),
+                'is_system' => (bool) ($row->is_system ?? true),
+                'course_id' => $row->course_id !== null ? (int) $row->course_id : null,
+                'course_title' => $row->course_title !== null ? (string) $row->course_title : null,
                 'achieved_at' => $row->achieved_at
                     ? \Illuminate\Support\Carbon::parse((string) $row->achieved_at)->format('d.m.Y H:i')
                     : null,
@@ -206,9 +215,45 @@ class StudentAchievementService
                     'title' => (string) $item['title'],
                     'description' => (string) ($item['description'] ?? ''),
                     'xp_reward' => (int) ($item['xp_reward'] ?? 0),
+                    'is_system' => true,
+                    'course_id' => null,
+                    'created_by' => null,
+                ],
+            );
+        }
+    }
+
+    private function syncCourseCompletionAchievements(int $userId): void
+    {
+        $completedCourseIds = DB::table('user_course_progress')
+            ->where('user_id', $userId)
+            ->whereNotNull('completed_at')
+            ->pluck('course_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+
+        if (count($completedCourseIds) === 0) {
+            return;
+        }
+
+        $courseAchievements = Achievement::query()
+            ->where('is_system', false)
+            ->whereIn('course_id', $completedCourseIds)
+            ->get(['id']);
+
+        foreach ($courseAchievements as $achievement) {
+            DB::table('user_achievements')->updateOrInsert(
+                [
+                    'user_id' => $userId,
+                    'achievement_id' => (int) $achievement->id,
+                ],
+                [
+                    'achieved_at' => now(),
                 ],
             );
         }
     }
 }
-

@@ -17,6 +17,12 @@
     /* Градиенты и тени */
     --gradient-gold: linear-gradient(90deg, #facc15 0%, #f97316 100%);
     --card-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+    --ui-text-primary: #0f172a;
+    --ui-text-secondary: #475569;
+    --ui-border: rgba(148, 163, 184, 0.45);
+    --ui-surface: #ffffff;
+    --ui-surface-soft: #f8fafc;
+    --ui-hover: rgba(30, 64, 175, 0.1);
 }
 
 body[data-theme="dark"] {
@@ -34,6 +40,12 @@ body[data-theme="dark"] {
     --bg-page: #020617;
     --gradient-gold: linear-gradient(90deg, #FFD700 0%, #ffae00 100%);
     --card-shadow: 0 20px 45px rgba(15, 23, 42, 0.8);
+    --ui-text-primary: #e2e8f0;
+    --ui-text-secondary: #94a3b8;
+    --ui-border: rgba(148, 163, 184, 0.42);
+    --ui-surface: rgba(15, 23, 42, 0.72);
+    --ui-surface-soft: rgba(30, 41, 59, 0.62);
+    --ui-hover: rgba(56, 189, 248, 0.16);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -654,7 +666,7 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-shell {
-    max-width: 900px;
+    max-width: 1240px;
     margin: 0 auto;
 }
 
@@ -682,26 +694,27 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     color: white;
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    padding: 40px;
-    border-radius: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.14);
+    padding: 34px;
+    border-radius: 24px;
     backdrop-filter: blur(10px);
+    box-shadow: 0 24px 56px rgba(2, 6, 23, 0.42);
 }
 
 /* Disable generic feature-card hover animation for the novella container */
 .quest-card:hover {
     transform: none;
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 215, 0, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 215, 0, 0.14);
     box-shadow: none;
 }
 
 .quest-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    gap: 28px;
     align-items: start;
 }
 
@@ -710,31 +723,47 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-image {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     text-align: center;
-    min-height: 100px;
+    min-height: 180px;
+    border-radius: 16px;
+    padding: 10px;
+    background: rgba(15, 23, 42, 0.22);
+    border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .quest-speaker {
-    color: #ffd700;
+    color: #facc15;
     font-weight: 800;
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+    text-transform: none;
+    letter-spacing: 0.3px;
 }
 
 .quest-text {
-    font-size: 1.3rem;
-    margin-bottom: 30px;
-    line-height: 1.8;
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+    line-height: 1.78;
+    max-width: 72ch;
     white-space: pre-line;
     min-height: 100px;
     transition: opacity 0.5s ease;
+    color: var(--ui-text-primary);
+}
+
+.quest-state-loading {
+    opacity: 0.78;
+    font-style: italic;
+}
+
+.quest-state-error {
+    color: #ef4444;
+    font-weight: 600;
 }
 
 .quest-comment {
-    color: #ffd700;
+    color: #fbbf24;
     margin-bottom: 20px;
     min-height: 24px;
     font-style: italic;
@@ -742,21 +771,31 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-options {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 30px;
 }
 
 .quest-options .option-btn {
-    flex: 1 1 240px;
+    min-height: 56px;
+    margin-bottom: 0;
+    border-color: var(--ui-border);
+    background: var(--ui-surface);
+    color: var(--ui-text-primary);
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.quest-options .option-btn:hover {
+    background: var(--ui-hover);
+    border-color: rgba(250, 204, 21, 0.5);
 }
 
 .quest-dictionary {
     margin-top: 30px;
-    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    border-top: 1px solid rgba(255, 215, 0, 0.14);
     padding-top: 25px;
 }
 
@@ -766,17 +805,17 @@ body[data-theme="light"] .lesson-empty-state {
     padding-top: 0;
     position: sticky;
     top: 110px;
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - 150px);
     overflow: auto;
     padding-right: 2px;
 }
 
 .quest-dictionary-title {
-    color: #ffd700;
+    color: var(--ui-text-primary);
     margin-bottom: 15px;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 1rem;
+    text-transform: none;
+    letter-spacing: 0.2px;
 }
 
 .quest-dictionary-list {
@@ -786,10 +825,10 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-dictionary-row {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,215,0,0.18);
-    border-radius: 10px;
-    padding: 10px 12px;
+    background: var(--ui-surface-soft);
+    border: 1px solid var(--ui-border);
+    border-radius: 12px;
+    padding: 12px 14px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
@@ -798,16 +837,16 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-dictionary-row:hover {
-    background: rgba(255,215,0,0.16);
+    background: var(--ui-hover);
 }
 
 .quest-dictionary-word {
-    color: #ffd700;
+    color: var(--ui-text-primary);
     font-weight: 700;
 }
 
 .quest-dictionary-translation {
-    color: #cbd5e1;
+    color: var(--ui-text-secondary);
     text-align: right;
 }
 
@@ -845,8 +884,8 @@ body[data-theme="light"] .lesson-empty-state {
 }
 
 .quest-progress-track {
-    margin-top: 20px;
-    height: 2px;
+    margin-top: 24px;
+    height: 4px;
     background: rgba(255, 215, 0, 0.1);
     border-radius: 2px;
     overflow: hidden;
@@ -857,6 +896,76 @@ body[data-theme="light"] .lesson-empty-state {
     height: 100%;
     background: linear-gradient(90deg, #ffd700, #ffaa00);
     transition: width 0.3s ease;
+}
+
+body[data-theme="light"] .quest-page {
+    background: #f8fafc;
+}
+
+body[data-theme="light"] .quest-card {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.1);
+}
+
+body[data-theme="light"] .quest-card:hover {
+    background: #ffffff;
+    border-color: rgba(148, 163, 184, 0.45);
+}
+
+body[data-theme="light"] .quest-speaker,
+body[data-theme="light"] .quest-comment,
+body[data-theme="light"] .quest-dictionary-title,
+body[data-theme="light"] .quest-dictionary-word,
+body[data-theme="light"] .quest-inline-word {
+    color: #1e3a8a;
+}
+
+body[data-theme="light"] .quest-inline-word {
+    border-bottom-color: rgba(29, 78, 216, 0.6);
+}
+
+body[data-theme="light"] .quest-inline-word:hover {
+    background: rgba(37, 99, 235, 0.12);
+}
+
+body[data-theme="light"] .quest-dictionary-row {
+    background: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+body[data-theme="light"] .quest-dictionary-row:hover {
+    background: #e2e8f0;
+}
+
+body[data-theme="light"] .quest-dictionary-translation {
+    color: #475569;
+}
+
+body[data-theme="light"] .quest-dictionary {
+    border-top-color: rgba(148, 163, 184, 0.4);
+}
+
+body[data-theme="light"] .quest-word-tooltip {
+    background: #0f172a;
+    color: #f8fafc;
+    border-color: rgba(37, 99, 235, 0.5);
+}
+
+body[data-theme="light"] .quest-progress-track {
+    background: rgba(30, 64, 175, 0.14);
+}
+
+body[data-theme="light"] .quest-options .option-btn {
+    background: var(--ui-surface-soft);
+    border-color: var(--ui-border);
+    color: var(--ui-text-primary);
+}
+
+body[data-theme="light"] .quest-options .option-btn:hover {
+    background: var(--ui-hover);
+    border-color: rgba(30, 64, 175, 0.45);
 }
 
 @media (max-width: 768px) {
@@ -874,15 +983,20 @@ body[data-theme="light"] .lesson-empty-state {
         gap: 16px;
     }
 
+    .quest-options {
+        grid-template-columns: 1fr;
+    }
+
     .quest-toolbar {
         gap: 10px;
-        justify-content: stretch;
+        justify-content: flex-start;
     }
 
     .quest-toolbar-btn {
-        width: 42px;
-        height: 42px;
-        margin-right: 6px;
+        width: 46px;
+        height: 46px;
+        margin-right: 2px;
+        border-radius: 10px;
     }
 
     .quest-speaker {
@@ -892,10 +1006,11 @@ body[data-theme="light"] .lesson-empty-state {
     }
 
     .quest-text {
-        font-size: 1.05rem;
-        line-height: 1.65;
+        font-size: 1rem;
+        line-height: 1.6;
         margin-bottom: 20px;
         min-height: 72px;
+        max-width: 100%;
     }
 
     .quest-comment {
@@ -911,8 +1026,35 @@ body[data-theme="light"] .lesson-empty-state {
         position: static;
         max-height: none;
         overflow: visible;
-        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
         padding-top: 16px;
+    }
+
+    .quest-dictionary-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+    }
+
+    .quest-dictionary-translation {
+        text-align: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .quest-page {
+        padding: 28px 26px 40px;
+    }
+
+    .quest-card {
+        padding: 38px;
+    }
+
+    .quest-toolbar--in-card {
+        margin-bottom: 22px;
+    }
+
+    .quest-dictionary-title {
+        font-size: 1.08rem;
     }
 }
 
@@ -927,6 +1069,160 @@ body[data-theme="light"] .lesson-empty-state {
 
     .quest-text {
         font-size: 1rem;
+    }
+}
+
+/* Quest visual refresh */
+.quest-page {
+    background:
+        radial-gradient(900px 420px at 10% -10%, rgba(14, 116, 144, 0.22), transparent 58%),
+        radial-gradient(760px 340px at 95% 0%, rgba(30, 64, 175, 0.2), transparent 56%),
+        #050816;
+}
+
+.quest-card {
+    border: 1px solid rgba(125, 211, 252, 0.26);
+    background: linear-gradient(165deg, rgba(9, 18, 45, 0.92), rgba(7, 17, 40, 0.88));
+}
+
+.quest-toolbar-btn {
+    border-radius: 12px;
+    min-width: 44px;
+}
+
+.quest-image {
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.34);
+}
+
+.quest-speaker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(250, 204, 21, 0.4);
+    background: rgba(120, 53, 15, 0.24);
+    margin-bottom: 14px;
+}
+
+.quest-text {
+    font-size: clamp(1.06rem, 1.3vw, 1.22rem);
+    line-height: 1.85;
+    text-align: left;
+}
+
+.quest-options .option-btn {
+    border-radius: 14px;
+    min-height: 58px;
+    box-shadow: 0 8px 18px rgba(2, 6, 23, 0.3);
+}
+
+.quest-dictionary--sidebar {
+    border: 1px solid rgba(125, 211, 252, 0.24);
+    border-radius: 14px;
+    padding: 14px;
+    background: rgba(2, 6, 23, 0.28);
+    max-height: none;
+    overflow: visible;
+}
+
+.quest-dictionary-list {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.quest-dictionary-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.quest-dictionary-translation {
+    text-align: right;
+    word-break: break-word;
+}
+
+body[data-theme="light"] .quest-page {
+    background:
+        radial-gradient(780px 360px at 10% -8%, rgba(14, 116, 144, 0.12), transparent 58%),
+        radial-gradient(680px 300px at 95% 0%, rgba(30, 64, 175, 0.12), transparent 56%),
+        #f1f5f9;
+}
+
+body[data-theme="light"] .quest-card {
+    background: linear-gradient(170deg, #ffffff, #f8fafc);
+    border-color: rgba(148, 163, 184, 0.4);
+}
+
+body[data-theme="light"] .quest-dictionary--sidebar {
+    background: #ffffff;
+    border-color: rgba(148, 163, 184, 0.42);
+}
+
+@media (max-width: 900px) {
+    .quest-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .quest-dictionary--sidebar {
+        position: static;
+        top: auto;
+        max-height: none;
+        overflow: visible;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .quest-page {
+        padding: 10px 8px 18px;
+    }
+
+    .quest-card {
+        padding: 14px 10px;
+        border-radius: 14px;
+    }
+
+    .quest-text {
+        line-height: 1.65;
+        word-break: break-word;
+        text-align: center;
+    }
+
+    .quest-dictionary-title {
+        font-size: 0.96rem;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .quest-dictionary-row {
+        grid-template-columns: 1fr;
+        padding: 10px 10px;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .quest-dictionary-word,
+    .quest-dictionary-translation {
+        font-size: 0.92rem;
+        text-align: center;
+    }
+
+    .quest-dictionary-translation {
+        text-align: center;
+    }
+
+    .quest-speaker,
+    .quest-comment {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .quest-options .option-btn {
+        text-align: center;
     }
 }
 
